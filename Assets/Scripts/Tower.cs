@@ -7,6 +7,8 @@ public class Tower : MonoBehaviour
     public Transform enemy;
 
     public float attackRange = 3;
+
+    [Header("Bullet Details")]
     public GameObject bulletPrefab;
     public float bulletSpeed = 3f;
 
@@ -15,13 +17,23 @@ public class Tower : MonoBehaviour
     {
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            GameObject newBullet = Instantiate(bulletPrefab, towerHead.position, Quaternion.identity);
-            newBullet.GetComponent<Rigidbody>().linearVelocity = enemy.position - towerHead.position;
+            CreateBullet();
         }
-        if (Vector3.Distance(enemy.position, transform.position) <= attackRange)
+
+        if (enemy != null)
         {
-            towerHead.LookAt(enemy);
+            if (Vector3.Distance(enemy.position, transform.position) <= attackRange)
+            {
+                towerHead.LookAt(enemy);
+            }
         }
+        
+    }
+
+    private void CreateBullet()
+    {
+        GameObject newBullet = Instantiate(bulletPrefab, towerHead.position, Quaternion.identity);
+        newBullet.GetComponent<Rigidbody>().linearVelocity = enemy.position - towerHead.position;
     }
 
     private void OnDrawGizmos()
