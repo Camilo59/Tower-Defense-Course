@@ -1,24 +1,31 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Tower : MonoBehaviour
 {
     public Transform towerHead;
     public Transform enemy;
 
+
+    [Header("Attack Details")]
     public float attackRange = 3;
+    public float attackCooldown;
+    public float lastTimeAttacked;
 
     [Header("Bullet Details")]
     public GameObject bulletPrefab;
     public float bulletSpeed = 3f;
 
-    
+
     void Update()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+
+        if (Time.time > lastTimeAttacked + attackCooldown)
         {
             CreateBullet();
+            lastTimeAttacked = Time.time;
         }
+
+
 
         if (enemy != null)
         {
@@ -27,7 +34,7 @@ public class Tower : MonoBehaviour
                 towerHead.LookAt(enemy);
             }
         }
-        
+
     }
 
     private void CreateBullet()
