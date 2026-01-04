@@ -9,7 +9,7 @@ public class Tower : MonoBehaviour
     [Header("Attack Details")]
     public float attackRange = 3;
     public float attackCooldown;
-    public float lastTimeAttacked;
+    private float lastTimeAttacked;
 
     [Header("Bullet Details")]
     public GameObject bulletPrefab;
@@ -18,20 +18,16 @@ public class Tower : MonoBehaviour
 
     void Update()
     {
+        if (enemy == null)
+            return;
 
-        if (Time.time > lastTimeAttacked + attackCooldown)
+        if (Vector3.Distance(enemy.position, transform.position) <= attackRange)
         {
-            CreateBullet();
-            lastTimeAttacked = Time.time;
-        }
+            towerHead.LookAt(enemy);
 
-
-
-        if (enemy != null)
-        {
-            if (Vector3.Distance(enemy.position, transform.position) <= attackRange)
+            if (ReadyToAttack())
             {
-                towerHead.LookAt(enemy);
+                CreateBullet();
             }
         }
 
@@ -41,6 +37,17 @@ public class Tower : MonoBehaviour
     {
         GameObject newBullet = Instantiate(bulletPrefab, towerHead.position, Quaternion.identity);
         newBullet.GetComponent<Rigidbody>().linearVelocity = enemy.position - towerHead.position;
+    }
+
+    private bool ReadyToAttack()
+    {
+        if (Time.time > lastTimeAttacked + attackCooldown)
+        {
+            lastTimeAttacked = Time.time;
+            return true;
+        }
+
+        return false;
     }
 
     private void OnDrawGizmos()
