@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
@@ -5,6 +6,7 @@ public class Tower : MonoBehaviour
     public Transform towerHead;
     public Transform enemy;
 
+    public List<Transform> enemyList;
 
     [Header("Attack Details")]
     public float attackRange = 3;
@@ -19,7 +21,10 @@ public class Tower : MonoBehaviour
     void Update()
     {
         if (enemy == null)
+        {
+            FindRandomEnemy();
             return;
+        }
 
         if (Vector3.Distance(enemy.position, transform.position) <= attackRange)
         {
@@ -31,6 +36,18 @@ public class Tower : MonoBehaviour
             }
         }
 
+    }
+
+    private void FindRandomEnemy()
+    {
+        if (enemyList.Count <= 0)
+        {
+            return;
+        }
+
+        int randomIndex = Random.Range(0, enemyList.Count);
+        enemy = enemyList[randomIndex];
+        enemyList.RemoveAt(randomIndex);
     }
 
     private void CreateBullet()
