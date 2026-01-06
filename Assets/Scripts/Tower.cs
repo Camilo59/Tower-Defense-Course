@@ -22,7 +22,7 @@ public class Tower : MonoBehaviour
     {
         if (enemy == null)
         {
-            FindRandomEnemy();
+            enemy = FindClosestEnemy();
             return;
         }
 
@@ -36,6 +36,28 @@ public class Tower : MonoBehaviour
             }
         }
 
+    }
+
+    private Transform FindClosestEnemy()
+    {
+        float closestDistance = float.MaxValue;
+        Transform closestEnemy = null;
+
+        foreach (Transform enemy in enemyList)
+        {
+            float distance = Vector3.Distance(enemy.position, transform.position);
+
+            if (distance < closestDistance && distance <= attackRange)
+            {
+                closestDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+
+        if (closestEnemy != null)
+            enemyList.Remove(closestEnemy);
+
+        return closestEnemy;
     }
 
     private void FindRandomEnemy()

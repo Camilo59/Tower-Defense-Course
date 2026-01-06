@@ -261,13 +261,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tower
   towerHead: {fileID: 1240163443}
-  enemy: {fileID: 2050673030}
+  enemy: {fileID: 0}
   enemyList:
   - {fileID: 2050673030}
   - {fileID: 268972711}
   - {fileID: 310319404}
   - {fileID: 1597742995}
-  attackRange: 6
+  attackRange: 3.84
   attackCooldown: 2
   bulletPrefab: {fileID: 2273710296947103768, guid: 486b78d6e4d5a4a478406f8de2ff543a, type: 3}
   bulletSpeed: 5
