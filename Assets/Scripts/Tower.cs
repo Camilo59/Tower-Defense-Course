@@ -3,20 +3,25 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
-    public Transform towerHead;
-    public Transform enemy;
+    [SerializeField] private Transform towerHead;
+    private EnemyCreator enemyCreator;
+    private Transform enemy;
 
-    public List<Transform> enemyList;
 
     [Header("Attack Details")]
-    public float attackRange = 3;
-    public float attackCooldown;
+    [SerializeField] private float attackRange = 3;
+    [SerializeField] private float attackCooldown;
     private float lastTimeAttacked;
 
     [Header("Bullet Details")]
-    public GameObject bulletPrefab;
-    public float bulletSpeed = 3f;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float bulletSpeed = 3f;
 
+
+    private void Awake()
+    {
+        enemyCreator = FindFirstObjectByType<EnemyCreator>();
+    }
 
     void Update()
     {
@@ -43,7 +48,7 @@ public class Tower : MonoBehaviour
         float closestDistance = float.MaxValue;
         Transform closestEnemy = null;
 
-        foreach (Transform enemy in enemyList)
+        foreach (Transform enemy in enemyCreator.EnemyList())
         {
             float distance = Vector3.Distance(enemy.position, transform.position);
 
@@ -55,21 +60,21 @@ public class Tower : MonoBehaviour
         }
 
         if (closestEnemy != null)
-            enemyList.Remove(closestEnemy);
+            enemyCreator.EnemyList().Remove(closestEnemy);
 
         return closestEnemy;
     }
 
     private void FindRandomEnemy()
     {
-        if (enemyList.Count <= 0)
+        if (enemyCreator.EnemyList().Count <= 0)
         {
             return;
         }
 
-        int randomIndex = Random.Range(0, enemyList.Count);
-        enemy = enemyList[randomIndex];
-        enemyList.RemoveAt(randomIndex);
+        int randomIndex = Random.Range(0, enemyCreator.EnemyList().Count);
+        enemy = enemyCreator.EnemyList()[randomIndex];
+        enemyCreator.EnemyList().RemoveAt(randomIndex);
     }
 
     private void CreateBullet()
